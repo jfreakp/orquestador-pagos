@@ -1,0 +1,101 @@
+<section class="catalog-page">
+  <h2>Transacciones</h2>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  <form
+    [formGroup]="filtersForm"
+    (ngSubmit)="applyFilters()"
+    class="catalog-form"
+  >
+    <label>
+      Gateway
+      <input type="text" formControlName="gatewayCode" placeholder="AHORITA" />
+    </label>
+    <label>
+      Estado
+      <input type="text" formControlName="statusCode" placeholder="APPROVED" />
+    </label>
+    <label>
+      Canal
+      <input type="text" formControlName="channelCode" placeholder="WEB" />
+    </label>
+    <label>
+      Sistema cliente
+      <input type="text" formControlName="clientSystemCode" />
+    </label>
+    <label>
+      Desde
+      <input type="date" formControlName="dateFrom" />
+    </label>
+    <label>
+      Hasta
+      <input type="date" formControlName="dateTo" />
+    </label>
+    <div class="actions">
+      <button type="submit">Filtrar</button>
+      <button type="button" (click)="clearFilters()">Limpiar</button>
+    </div>
+  </form>
+
+  @if (loading()) {
+    <p>Cargando…</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Id público</th>
+          <th>Gateway</th>
+          <th>Canal</th>
+          <th>Sistema cliente</th>
+          <th>Estado</th>
+          <th>Monto</th>
+          <th>Referencia externa</th>
+          <th>Creada</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item.publicId) {
+          <tr>
+            <td><code>{{ item.publicId.slice(0, 8) }}…</code></td>
+            <td>{{ item.gatewayCode }}</td>
+            <td>{{ item.channelCode }}</td>
+            <td>{{ item.clientSystemCode }}</td>
+            <td>{{ item.statusCode }}</td>
+            <td>{{ item.amount }} {{ item.currency }}</td>
+            <td>{{ item.externalReference || '—' }}</td>
+            <td>{{ item.createdAt | date: 'short' }}</td>
+            <td>
+              <a [routerLink]="[item.publicId]">Ver</a>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="9">Sin registros</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <button
+        type="button"
+        (click)="goToPage(page() - 1)"
+        [disabled]="page() <= 1"
+      >
+        Anterior
+      </button>
+      <span>Página {{ page() }} de {{ totalPages() }}</span>
+      <button
+        type="button"
+        (click)="goToPage(page() + 1)"
+        [disabled]="page() >= totalPages()"
+      >
+        Siguiente
+      </button>
+    </div>
+  }
+</section>

@@ -36,6 +36,10 @@ export interface TransactionDetail extends TransactionListItem {
   paymentLink?: string;
   qrCodeBase64?: string;
   statusHistory: TransactionStatusHistoryItem[];
+  requestPlain?: unknown;
+  responsePlain?: unknown;
+  requestEncryptedBase64?: string;
+  responseEncryptedBase64?: string;
 }
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -139,6 +143,14 @@ export class TransactionsService {
         note: entry.note ?? undefined,
         createdAt: entry.createdAt,
       })),
+      requestPlain: transaction.requestPlain ?? undefined,
+      responsePlain: transaction.responsePlain ?? undefined,
+      requestEncryptedBase64: transaction.requestEncrypted
+        ? Buffer.from(transaction.requestEncrypted).toString('base64')
+        : undefined,
+      responseEncryptedBase64: transaction.responseEncrypted
+        ? Buffer.from(transaction.responseEncrypted).toString('base64')
+        : undefined,
     };
   }
 

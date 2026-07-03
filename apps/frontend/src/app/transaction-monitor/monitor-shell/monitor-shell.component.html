@@ -1,0 +1,29 @@
+<div class="admin-shell">
+  <aside class="admin-nav">
+    <h1>Orquestador · Monitor</h1>
+
+    <div class="admin-token">
+      <label>
+        Token admin
+        <input
+          type="password"
+          [(ngModel)]="tokenInput"
+          (change)="saveToken()"
+          placeholder="x-admin-token"
+        />
+      </label>
+    </div>
+
+    <nav>
+      <a routerLink="transactions" routerLinkActive="active">Transacciones</a>
+      <a routerLink="transaction-errors" routerLinkActive="active"
+        >Errores</a
+      >
+      <a routerLink="/admin/gateways">Ir a Admin</a>
+    </nav>
+  </aside>
+
+  <main class="admin-content">
+    <router-outlet />
+  </main>
+</div>

@@ -1,0 +1,111 @@
+<section class="detail-page">
+  <a routerLink=".." class="back-link">← Volver al listado</a>
+  <h2>Transacción {{ publicId }}</h2>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  @if (loading()) {
+    <p>Cargando…</p>
+  } @else if (transaction(); as tx) {
+    <div class="general-data">
+      <h3>Datos generales</h3>
+      <dl>
+        <dt>Estado</dt>
+        <dd>{{ tx.statusCode }}</dd>
+        <dt>Gateway</dt>
+        <dd>{{ tx.gatewayCode }}</dd>
+        <dt>Canal</dt>
+        <dd>{{ tx.channelCode }}</dd>
+        <dt>Sistema cliente</dt>
+        <dd>{{ tx.clientSystemCode }}</dd>
+        <dt>Monto</dt>
+        <dd>{{ tx.amount }} {{ tx.currency }}</dd>
+        <dt>Referencia externa</dt>
+        <dd>{{ tx.externalReference || '—' }}</dd>
+        <dt>Link de cobro</dt>
+        <dd>{{ tx.paymentLink || '—' }}</dd>
+        <dt>Creada</dt>
+        <dd>{{ tx.createdAt | date: 'medium' }}</dd>
+        <dt>Actualizada</dt>
+        <dd>{{ tx.updatedAt | date: 'medium' }}</dd>
+      </dl>
+
+      @if (tx.qrCodeBase64) {
+        <div class="qr">
+          <h4>QR de cobro</h4>
+          <img [src]="tx.qrCodeBase64" alt="QR de cobro" />
+        </div>
+      }
+    </div>
+
+    <div class="timeline-section">
+      <h3>Historial</h3>
+      @if (tx.statusHistory.length) {
+        <ol class="timeline">
+          @for (entry of tx.statusHistory; track $index) {
+            <li>
+              <span class="timeline-date">{{
+                entry.createdAt | date: 'short'
+              }}</span>
+              <span class="timeline-status">{{ entry.statusCode }}</span>
+              @if (entry.operationTypeCode) {
+                <span class="timeline-op">{{ entry.operationTypeCode }}</span>
+              }
+              @if (entry.note) {
+                <p class="timeline-note">{{ entry.note }}</p>
+              }
+            </li>
+          }
+        </ol>
+      } @else {
+        <p>Sin historial</p>
+      }
+    </div>
+
+    <div class="json-section">
+      <h3>Payloads</h3>
+      <div class="tabs">
+        <button
+          type="button"
+          [class.active]="activeJsonTab() === 'plain'"
+          (click)="setJsonTab('plain')"
+        >
+          Plain
+        </button>
+        <button
+          type="button"
+          [class.active]="activeJsonTab() === 'encrypted'"
+          (click)="setJsonTab('encrypted')"
+        >
+          Encrypted
+        </button>
+      </div>
+
+      @if (activeJsonTab() === 'plain') {
+        <div class="json-tab-content">
+          <h4>Request</h4>
+          <pre class="json-view"><code [innerHTML]="requestPlainHtml()"></code></pre>
+          <h4>Response</h4>
+          <pre class="json-view"><code [innerHTML]="responsePlainHtml()"></code></pre>
+        </div>
+      } @else {
+        <div class="json-tab-content">
+          <details>
+            <summary>Request cifrado (base64)</summary>
+            <pre class="encrypted-view">{{
+              tx.requestEncryptedBase64 || '(vacío)'
+            }}</pre>
+          </details>
+          <details>
+            <summary>Response cifrado (base64)</summary>
+            <pre class="encrypted-view">{{
+              tx.responseEncryptedBase64 || '(vacío)'
+            }}</pre>
+          </details>
+        </div>
+      }
+    </div>
+  }
+</section>

@@ -154,5 +154,41 @@ describe('TransactionsService', () => {
       expect(qrCodeService.generateBase64).not.toHaveBeenCalled();
       expect(result.qrCodeBase64).toBeUndefined();
     });
+
+    it('includes plain JSON payloads and base64-encoded encrypted payloads', async () => {
+      prisma.transaction.findUnique.mockResolvedValue(
+        buildTransactionRow({
+          requestPlain: { amount: 25, currency: 'USD' },
+          responsePlain: { status: 'APPROVED' },
+          requestEncrypted: Buffer.from('req-cipher'),
+          responseEncrypted: Buffer.from('res-cipher'),
+          statusHistory: [],
+        }),
+      );
+
+      const result = await service.findByPublicId('public-1');
+
+      expect(result.requestPlain).toEqual({ amount: 25, currency: 'USD' });
+      expect(result.responsePlain).toEqual({ status: 'APPROVED' });
+      expect(result.requestEncryptedBase64).toBe(
+        Buffer.from('req-cipher').toString('base64'),
+      );
+      expect(result.responseEncryptedBase64).toBe(
+        Buffer.from('res-cipher').toString('base64'),
+      );
+    });
+
+    it('omits encrypted/plain fields when the transaction has none', async () => {
+      prisma.transaction.findUnique.mockResolvedValue(
+        buildTransactionRow({ statusHistory: [] }),
+      );
+
+      const result = await service.findByPublicId('public-1');
+
+      expect(result.requestPlain).toBeUndefined();
+      expect(result.responsePlain).toBeUndefined();
+      expect(result.requestEncryptedBase64).toBeUndefined();
+      expect(result.responseEncryptedBase64).toBeUndefined();
+    });
   });
 });

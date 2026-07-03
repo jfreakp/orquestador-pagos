@@ -1,8 +1,13 @@
+import { NotFoundException } from '@nestjs/common';
 import { TransactionErrorsService } from './transaction-errors.service';
 
 describe('TransactionErrorsService', () => {
   let prisma: {
-    transactionError: { findMany: jest.Mock; count: jest.Mock };
+    transactionError: {
+      findMany: jest.Mock;
+      count: jest.Mock;
+      findUnique: jest.Mock;
+    };
   };
   let service: TransactionErrorsService;
 
@@ -11,6 +16,7 @@ describe('TransactionErrorsService', () => {
       transactionError: {
         findMany: jest.fn().mockResolvedValue([]),
         count: jest.fn().mockResolvedValue(0),
+        findUnique: jest.fn(),
       },
     };
     service = new TransactionErrorsService(prisma as never);
@@ -83,5 +89,38 @@ describe('TransactionErrorsService', () => {
         createdAt: new Date('2026-01-02'),
       },
     ]);
+  });
+
+  describe('findById', () => {
+    it('returns the error detail including details', async () => {
+      prisma.transactionError.findUnique.mockResolvedValue({
+        id: 1,
+        message: 'gateway down',
+        createdAt: new Date('2026-01-02'),
+        details: { httpStatus: 503 },
+        transaction: { publicId: 'public-1', gateway: { code: 'AHORITA' } },
+        errorCategory: { code: 'COMMUNICATION' },
+        gatewayOperationType: { code: 'CREATE_PAYMENT' },
+      });
+
+      const result = await service.findById(1);
+
+      expect(result).toEqual({
+        id: 1,
+        transactionPublicId: 'public-1',
+        errorCategoryCode: 'COMMUNICATION',
+        gatewayCode: 'AHORITA',
+        gatewayOperationTypeCode: 'CREATE_PAYMENT',
+        message: 'gateway down',
+        createdAt: new Date('2026-01-02'),
+        details: { httpStatus: 503 },
+      });
+    });
+
+    it('throws NotFoundException when missing', async () => {
+      prisma.transactionError.findUnique.mockResolvedValue(null);
+
+      await expect(service.findById(99)).rejects.toThrow(NotFoundException);
+    });
   });
 });

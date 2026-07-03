@@ -1,0 +1,126 @@
+@use '../core/json-view';
+
+.detail-page {
+  max-width: 900px;
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    color: #3355dd;
+    text-decoration: none;
+  }
+
+  .error {
+    color: #b00020;
+    background: #fdecea;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+  }
+
+  h3 {
+    margin-top: 2rem;
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 0.35rem 1rem;
+    margin: 0;
+
+    dt {
+      font-weight: 600;
+      color: #555;
+    }
+    dd {
+      margin: 0;
+    }
+  }
+
+  .qr {
+    margin-top: 1rem;
+
+    img {
+      width: 160px;
+      height: 160px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+  }
+
+  .timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-left: 2px solid #ddd;
+
+    li {
+      position: relative;
+      padding: 0 0 1rem 1rem;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: -5px;
+        top: 4px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #3355dd;
+      }
+    }
+
+    .timeline-date {
+      font-size: 0.75rem;
+      color: #777;
+      margin-right: 0.5rem;
+    }
+
+    .timeline-status {
+      font-weight: 600;
+    }
+
+    .timeline-op {
+      margin-left: 0.5rem;
+      font-size: 0.75rem;
+      color: #555;
+      background: #eee;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+    }
+
+    .timeline-note {
+      margin: 0.25rem 0 0;
+      font-size: 0.85rem;
+      color: #444;
+    }
+  }
+
+  .tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+
+    button {
+      padding: 0.4rem 0.8rem;
+      border: 1px solid #ddd;
+      background: #f7f7f9;
+      border-radius: 4px 4px 0 0;
+      cursor: pointer;
+
+      &.active {
+        background: #fff;
+        border-bottom-color: #fff;
+        font-weight: 600;
+      }
+    }
+  }
+
+  details {
+    margin-bottom: 0.75rem;
+
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+    }
+  }
+}

@@ -1,0 +1,91 @@
+<section class="catalog-page">
+  <h2>Errores de transacción</h2>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  <form
+    [formGroup]="filtersForm"
+    (ngSubmit)="applyFilters()"
+    class="catalog-form"
+  >
+    <label>
+      Categoría de error
+      <input
+        type="text"
+        formControlName="errorCategoryCode"
+        placeholder="AUTH"
+      />
+    </label>
+    <label>
+      Gateway
+      <input type="text" formControlName="gatewayCode" placeholder="AHORITA" />
+    </label>
+    <div class="actions">
+      <button type="submit">Filtrar</button>
+      <button type="button" (click)="clearFilters()">Limpiar</button>
+    </div>
+  </form>
+
+  @if (loading()) {
+    <p>Cargando…</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Transacción</th>
+          <th>Categoría</th>
+          <th>Gateway</th>
+          <th>Operación</th>
+          <th>Mensaje</th>
+          <th>Fecha</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item.id) {
+          <tr>
+            <td>{{ item.id }}</td>
+            <td>
+              @if (item.transactionPublicId) {
+                <code>{{ item.transactionPublicId.slice(0, 8) }}…</code>
+              } @else {
+                —
+              }
+            </td>
+            <td>{{ item.errorCategoryCode }}</td>
+            <td>{{ item.gatewayCode || '—' }}</td>
+            <td>{{ item.gatewayOperationTypeCode || '—' }}</td>
+            <td>{{ item.message }}</td>
+            <td>{{ item.createdAt | date: 'short' }}</td>
+            <td><a [routerLink]="[item.id]">Ver</a></td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="8">Sin registros</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <button
+        type="button"
+        (click)="goToPage(page() - 1)"
+        [disabled]="page() <= 1"
+      >
+        Anterior
+      </button>
+      <span>Página {{ page() }} de {{ totalPages() }}</span>
+      <button
+        type="button"
+        (click)="goToPage(page() + 1)"
+        [disabled]="page() >= totalPages()"
+      >
+        Siguiente
+      </button>
+    </div>
+  }
+</section>

@@ -1,4 +1,11 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { AdminAuthGuard } from '../common/admin-auth.guard';
 import { TransactionErrorsService } from './transaction-errors.service';
 
@@ -21,5 +28,10 @@ export class TransactionErrorsController {
       page !== undefined ? Number(page) : undefined,
       pageSize !== undefined ? Number(pageSize) : undefined,
     );
+  }
+
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.transactionErrorsService.findById(id);
   }
 }

@@ -1,0 +1,38 @@
+<section class="detail-page">
+  <a routerLink=".." class="back-link">← Volver al listado</a>
+  <h2>Error de transacción #{{ id }}</h2>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  @if (loading()) {
+    <p>Cargando…</p>
+  } @else if (error(); as err) {
+    <dl>
+      <dt>Categoría</dt>
+      <dd>{{ err.errorCategoryCode }}</dd>
+      <dt>Gateway</dt>
+      <dd>{{ err.gatewayCode || '—' }}</dd>
+      <dt>Tipo de operación</dt>
+      <dd>{{ err.gatewayOperationTypeCode || '—' }}</dd>
+      <dt>Transacción</dt>
+      <dd>
+        @if (err.transactionPublicId) {
+          <a [routerLink]="['/transaction-monitor/transactions', err.transactionPublicId]">{{
+            err.transactionPublicId
+          }}</a>
+        } @else {
+          —
+        }
+      </dd>
+      <dt>Mensaje</dt>
+      <dd>{{ err.message }}</dd>
+      <dt>Fecha</dt>
+      <dd>{{ err.createdAt | date: 'medium' }}</dd>
+    </dl>
+
+    <h3>Detalles</h3>
+    <pre class="json-view"><code [innerHTML]="detailsHtml()"></code></pre>
+  }
+</section>

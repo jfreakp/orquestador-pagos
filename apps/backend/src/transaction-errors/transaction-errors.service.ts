@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma, PrismaService } from '@orquestador/prisma';
 import { PaginatedResult } from '../catalogs/base-catalog.service';
 
@@ -15,6 +15,10 @@ export interface TransactionErrorListItem {
   gatewayOperationTypeCode?: string;
   message: string;
   createdAt: Date;
+}
+
+export interface TransactionErrorDetail extends TransactionErrorListItem {
+  details?: unknown;
 }
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -70,6 +74,20 @@ export class TransactionErrorsService {
       total,
       page: safePage,
       pageSize: safePageSize,
+    };
+  }
+
+  async findById(id: number): Promise<TransactionErrorDetail> {
+    const error = await this.prisma.transactionError.findUnique({
+      where: { id },
+      include: errorInclude,
+    });
+    if (!error) {
+      throw new NotFoundException(`TransactionError not found: ${id}`);
+    }
+    return {
+      ...this.toListItem(error),
+      details: error.details ?? undefined,
     };
   }
 

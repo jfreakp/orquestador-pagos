@@ -1,0 +1,28 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./apps/backend"
+    },
+    {
+      "path": "./libs/shared-types"
+    },
+    {
+      "path": "./libs/prisma"
+    },
+    {
+      "path": "./libs/gateway-ahorita"
+    },
+    {
+      "path": "./libs/gateway-placetopay"
+    },
+    {
+      "path": "./libs/gateway-deuna"
+    },
+    {
+      "path": "./apps/frontend"
+    }
+  ]
+}

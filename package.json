@@ -32,6 +32,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.0.0",
     "@types/pg": "^8.20.0",
+    "@types/qrcode": "^1.5.6",
     "@typescript-eslint/utils": "^8.40.0",
     "angular-eslint": "^21.2.0",
     "eslint": "^9.8.0",
@@ -78,6 +79,7 @@
     "dotenv": "^17.4.2",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.22.0",
+    "qrcode": "^1.5.4",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.0"
   }

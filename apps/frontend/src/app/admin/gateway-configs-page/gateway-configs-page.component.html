@@ -1,0 +1,159 @@
+<section class="catalog-page">
+  <h2>Configuración de gateways</h2>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="catalog-form">
+    <label>
+      Gateway
+      <select formControlName="gatewayCode">
+        <option value="" disabled>Selecciona…</option>
+        @for (gateway of gateways(); track gateway.id) {
+          <option [value]="gateway.code">{{ gateway.name }}</option>
+        }
+      </select>
+    </label>
+
+    <label>
+      Canal
+      <select formControlName="channelCode">
+        <option value="" disabled>Selecciona…</option>
+        @for (channel of channels(); track channel.id) {
+          <option [value]="channel.code">{{ channel.name }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="checkbox">
+      <input type="checkbox" formControlName="isActive" />
+      Activo
+    </label>
+
+    @if (editingId()) {
+      <div class="full-width">
+        <p class="credentials-status">
+          Credenciales ya configuradas. El valor anterior no se puede ver,
+          solo sobrescribir.
+        </p>
+        <label class="checkbox">
+          <input type="checkbox" formControlName="replaceCredentials" />
+          Reemplazar credenciales
+        </label>
+      </div>
+    }
+
+    @if (!editingId() || form.controls.replaceCredentials.value) {
+      @switch (form.controls.gatewayCode.value) {
+        @case ('AHORITA') {
+          <label>
+            Código de cliente
+            <input type="text" formControlName="ahoritaClientCode" />
+          </label>
+          <label class="full-width">
+            Llave pública del banco (PEM)
+            <textarea
+              formControlName="ahoritaBankPublicKeyPem"
+              rows="4"
+            ></textarea>
+          </label>
+          <label class="full-width">
+            Llave privada del cliente (PEM)
+            <textarea
+              formControlName="ahoritaClientPrivateKeyPem"
+              rows="4"
+            ></textarea>
+          </label>
+          <label>
+            Merchant hash
+            <input type="text" formControlName="ahoritaMerchantHash" />
+          </label>
+        }
+        @case ('PLACETOPAY') {
+          <label>
+            Login
+            <input type="text" formControlName="placetopayLogin" />
+          </label>
+          <label>
+            Secret key
+            <input type="text" formControlName="placetopaySecretKey" />
+          </label>
+        }
+        @default {
+          @if (form.controls.gatewayCode.value) {
+            <label class="full-width">
+              Credenciales (JSON)
+              <textarea
+                formControlName="genericCredentialsJson"
+                rows="4"
+                placeholder="{{ '{' }} &quot;campo&quot;: &quot;valor&quot; {{ '}' }}"
+              ></textarea>
+            </label>
+          }
+        }
+      }
+    }
+
+    <div class="actions">
+      <button type="submit">
+        {{ editingId() ? 'Guardar cambios' : 'Crear' }}
+      </button>
+      @if (editingId()) {
+        <button type="button" (click)="cancelEdit()">Cancelar</button>
+      }
+    </div>
+  </form>
+
+  @if (loading()) {
+    <p>Cargando…</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Gateway</th>
+          <th>Canal</th>
+          <th>Activo</th>
+          <th>Credenciales</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item.id) {
+          <tr>
+            <td>{{ gatewayCodeById().get(item.gatewayId) }}</td>
+            <td>{{ channelCodeById().get(item.channelId) }}</td>
+            <td>{{ item.isActive ? 'Sí' : 'No' }}</td>
+            <td>{{ item.hasCredentials ? 'Configuradas' : 'Sin configurar' }}</td>
+            <td class="row-actions">
+              <button type="button" (click)="startEdit(item)">Editar</button>
+              <button type="button" (click)="remove(item)">Eliminar</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5">Sin registros</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <button
+        type="button"
+        (click)="goToPage(page() - 1)"
+        [disabled]="page() <= 1"
+      >
+        Anterior
+      </button>
+      <span>Página {{ page() }} de {{ totalPages() }}</span>
+      <button
+        type="button"
+        (click)="goToPage(page() + 1)"
+        [disabled]="page() >= totalPages()"
+      >
+        Siguiente
+      </button>
+    </div>
+  }
+</section>

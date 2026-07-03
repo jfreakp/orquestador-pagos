@@ -1,0 +1,86 @@
+<section class="catalog-page">
+  <h2>{{ title }}</h2>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="catalog-form">
+    <label>
+      Código
+      <input type="text" formControlName="code" />
+    </label>
+    <label>
+      Nombre
+      <input type="text" formControlName="name" />
+    </label>
+    @if (hasIsActive) {
+      <label class="checkbox">
+        <input type="checkbox" formControlName="isActive" />
+        Activo
+      </label>
+    }
+    <div class="actions">
+      <button type="submit">
+        {{ editingId() ? 'Guardar cambios' : 'Crear' }}
+      </button>
+      @if (editingId()) {
+        <button type="button" (click)="cancelEdit()">Cancelar</button>
+      }
+    </div>
+  </form>
+
+  @if (loading()) {
+    <p>Cargando…</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nombre</th>
+          @if (hasIsActive) {
+            <th>Activo</th>
+          }
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item.id) {
+          <tr>
+            <td>{{ item.code }}</td>
+            <td>{{ item.name }}</td>
+            @if (hasIsActive) {
+              <td>{{ item.isActive ? 'Sí' : 'No' }}</td>
+            }
+            <td class="row-actions">
+              <button type="button" (click)="startEdit(item)">Editar</button>
+              <button type="button" (click)="remove(item)">Eliminar</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td [attr.colspan]="hasIsActive ? 4 : 3">Sin registros</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <button
+        type="button"
+        (click)="goToPage(page() - 1)"
+        [disabled]="page() <= 1"
+      >
+        Anterior
+      </button>
+      <span>Página {{ page() }} de {{ totalPages() }}</span>
+      <button
+        type="button"
+        (click)="goToPage(page() + 1)"
+        [disabled]="page() >= totalPages()"
+      >
+        Siguiente
+      </button>
+    </div>
+  }
+</section>

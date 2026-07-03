@@ -1,0 +1,100 @@
+.catalog-page {
+  max-width: 900px;
+
+  h2 {
+    margin-top: 0;
+  }
+
+  .error {
+    color: #b00020;
+    background: #fdecea;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+  }
+
+  .catalog-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #f7f7f9;
+    border-radius: 6px;
+
+    .full-width {
+      flex-basis: 100%;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      font-size: 0.85rem;
+
+      &.checkbox {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.4rem;
+      }
+
+      &.full-width {
+        flex-basis: 100%;
+      }
+    }
+
+    .credentials-status {
+      margin: 0 0 0.25rem;
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    input[type='text'],
+    input[type='number'],
+    select,
+    textarea {
+      padding: 0.4rem;
+      min-width: 200px;
+    }
+
+    textarea {
+      font-family: monospace;
+      font-size: 0.8rem;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .field-error {
+      color: #b00020;
+      font-size: 0.75rem;
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+      text-align: left;
+      padding: 0.5rem;
+      border-bottom: 1px solid #eee;
+      font-size: 0.9rem;
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+}

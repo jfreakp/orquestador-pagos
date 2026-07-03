@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { OrquestadorPrismaModule } from '@orquestador/prisma';
+import { CatalogsModule } from '../catalogs/catalogs.module';
 import { LoggingInterceptor } from '../common/logging.interceptor';
+import { GatewayConfigModule } from '../gateway-config/gateway-config.module';
 import { PaymentsModule } from '../payments/payments.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -15,6 +17,8 @@ import { AppService } from './app.service';
     }),
     OrquestadorPrismaModule,
     PaymentsModule,
+    CatalogsModule,
+    GatewayConfigModule,
   ],
   controllers: [AppController],
   providers: [

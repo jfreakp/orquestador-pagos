@@ -6,6 +6,8 @@ import { CatalogsModule } from '../catalogs/catalogs.module';
 import { LoggingInterceptor } from '../common/logging.interceptor';
 import { GatewayConfigModule } from '../gateway-config/gateway-config.module';
 import { PaymentsModule } from '../payments/payments.module';
+import { TransactionErrorsModule } from '../transaction-errors/transaction-errors.module';
+import { TransactionsModule } from '../transactions/transactions.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -19,6 +21,8 @@ import { AppService } from './app.service';
     PaymentsModule,
     CatalogsModule,
     GatewayConfigModule,
+    TransactionsModule,
+    TransactionErrorsModule,
   ],
   controllers: [AppController],
   providers: [

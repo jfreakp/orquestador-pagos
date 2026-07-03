@@ -22,6 +22,7 @@ model Gateway {
   gatewayConfigs GatewayConfig[]
   transactions   Transaction[]
   webhookEvents  GatewayWebhookEvent[]
+  authTokens     GatewayAuthToken[]
 
   @@map("gateways")
 }
@@ -108,24 +109,26 @@ model GatewayConfig {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  gateway    Gateway            @relation(fields: [gatewayId], references: [id])
-  channel    Channel            @relation(fields: [channelId], references: [id])
-  authTokens GatewayAuthToken[]
+  gateway Gateway @relation(fields: [gatewayId], references: [id])
+  channel Channel @relation(fields: [channelId], references: [id])
 
   @@unique([gatewayId, channelId])
   @@map("gateway_configs")
 }
 
 model GatewayAuthToken {
-  id              Int      @id @default(autoincrement())
-  gatewayConfigId Int      @map("gateway_config_id")
-  // Cifrado igual que credentials; se reutiliza mientras no expire.
-  accessToken     Bytes    @map("access_token")
-  expiresAt       DateTime @map("expires_at")
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
+  id        Int @id @default(autoincrement())
+  // El token se reutiliza mientras no expire; el advisory lock que lo
+  // protege se toma por gateway (no por canal): 'gateway_token_' || code.
+  gatewayId Int @map("gateway_id")
+  // Cifrados igual que credentials; nunca se loguean en texto plano.
+  accessToken  Bytes  @map("access_token")
+  refreshToken Bytes? @map("refresh_token")
+  expiresAt    DateTime @map("expires_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
-  gatewayConfig GatewayConfig @relation(fields: [gatewayConfigId], references: [id])
+  gateway Gateway @relation(fields: [gatewayId], references: [id])
 
   @@map("gateway_auth_tokens")
 }

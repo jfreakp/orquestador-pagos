@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AdminApiService } from '../../admin/core/admin-api.service';
 import { extractErrorMessage } from '../../admin/core/extract-error-message';
+import { statusPillModifier } from '../../shared/status-pill';
 import { TransactionListItem } from '../core/monitor-models';
 
 const RESOURCE_PATH = 'transactions';
@@ -17,6 +18,8 @@ const PAGE_SIZE = 10;
   styleUrl: './transactions-list-page.component.scss',
 })
 export class TransactionsListPageComponent {
+  protected readonly statusPillModifier = statusPillModifier;
+
   private readonly api = inject(AdminApiService);
   private readonly fb = inject(FormBuilder);
 

@@ -13,7 +13,12 @@
       <h3>Datos generales</h3>
       <dl>
         <dt>Estado</dt>
-        <dd>{{ tx.statusCode }}</dd>
+        <dd>
+          <span
+            [class]="'status-pill status-pill--' + statusPillModifier(tx.statusCode)"
+            >{{ tx.statusCode }}</span
+          >
+        </dd>
         <dt>Gateway</dt>
         <dd>{{ tx.gatewayCode }}</dd>
         <dt>Canal</dt>
@@ -49,7 +54,10 @@
               <span class="timeline-date">{{
                 entry.createdAt | date: 'short'
               }}</span>
-              <span class="timeline-status">{{ entry.statusCode }}</span>
+              <span
+                [class]="'status-pill status-pill--' + statusPillModifier(entry.statusCode)"
+                >{{ entry.statusCode }}</span
+              >
               @if (entry.operationTypeCode) {
                 <span class="timeline-op">{{ entry.operationTypeCode }}</span>
               }

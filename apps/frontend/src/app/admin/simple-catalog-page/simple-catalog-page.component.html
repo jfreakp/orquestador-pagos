@@ -50,7 +50,12 @@
             <td>{{ item.code }}</td>
             <td>{{ item.name }}</td>
             @if (hasIsActive) {
-              <td>{{ item.isActive ? 'Sí' : 'No' }}</td>
+              <td>
+                <span
+                  [class]="'status-pill status-pill--' + booleanPillModifier(!!item.isActive)"
+                  >{{ item.isActive ? 'Activo' : 'Inactivo' }}</span
+                >
+              </td>
             }
             <td class="row-actions">
               <button type="button" (click)="startEdit(item)">Editar</button>

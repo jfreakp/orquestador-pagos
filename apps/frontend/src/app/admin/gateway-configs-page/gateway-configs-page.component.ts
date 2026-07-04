@@ -3,6 +3,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminApiService } from '../core/admin-api.service';
 import { extractErrorMessage } from '../core/extract-error-message';
+import { booleanPillModifier } from '../../shared/status-pill';
 
 interface GatewayConfigItem {
   id: number;
@@ -29,6 +30,8 @@ const PAGE_SIZE = 10;
   styleUrl: './gateway-configs-page.component.scss',
 })
 export class GatewayConfigsPageComponent {
+  protected readonly booleanPillModifier = booleanPillModifier;
+
   private readonly api = inject(AdminApiService);
   private readonly fb = inject(FormBuilder);
 

@@ -1,26 +1,32 @@
 .catalog-page {
-  max-width: 900px;
+  max-width: 1100px;
 
   h2 {
-    margin-top: 0;
+    margin: 0 0 var(--space-lg);
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
   }
 
   .error {
-    color: #b00020;
-    background: #fdecea;
-    padding: 0.5rem 0.75rem;
-    border-radius: 4px;
+    color: var(--color-on-error-container);
+    background: var(--color-error-container);
+    padding: 0.6rem 0.9rem;
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-md);
+    font-size: 0.85rem;
   }
 
   .catalog-form {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background: #f7f7f9;
-    border-radius: 6px;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+    padding: var(--space-md);
+    background: var(--color-surface-container-lowest);
+    border: 1px solid var(--color-outline-variant);
+    border-radius: var(--radius-lg);
 
     .full-width {
       flex-basis: 100%;
@@ -29,13 +35,16 @@
     label {
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
-      font-size: 0.85rem;
+      gap: 0.3rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--color-on-surface);
 
       &.checkbox {
         flex-direction: row;
         align-items: center;
-        gap: 0.4rem;
+        gap: 0.5rem;
+        font-weight: 500;
       }
 
       &.full-width {
@@ -44,57 +53,178 @@
     }
 
     .credentials-status {
-      margin: 0 0 0.25rem;
-      font-size: 0.85rem;
-      color: #555;
+      margin: 0 0 0.35rem;
+      font-size: 0.8rem;
+      color: var(--color-on-surface-variant);
     }
 
     input[type='text'],
     input[type='number'],
+    input[type='date'],
+    input[type='password'],
     select,
     textarea {
-      padding: 0.4rem;
+      padding: 0.55rem 0.7rem;
       min-width: 200px;
+      border: 1px solid var(--color-outline-variant);
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      background: var(--color-surface-container-lowest);
+      color: var(--color-on-surface);
+      transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+
+      &:focus {
+        outline: none;
+        border-color: var(--color-charcoal);
+        box-shadow: 0 0 0 3px rgba(255, 56, 92, 0.12);
+      }
+    }
+
+    input[type='checkbox'] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--color-accent);
     }
 
     textarea {
-      font-family: monospace;
-      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
     }
 
     .actions {
       display: flex;
-      gap: 0.5rem;
+      gap: var(--space-sm);
     }
 
     .field-error {
-      color: #b00020;
+      color: var(--color-error);
       font-size: 0.75rem;
+    }
+  }
+
+  // Buttons: primary submit action in accent red, everything else ghost.
+  button[type='submit'] {
+    padding: 0.6rem 1.4rem;
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--color-accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+
+    &:hover {
+      filter: brightness(1.1);
+    }
+  }
+
+  button[type='button'] {
+    padding: 0.6rem 1.2rem;
+    border: 1px solid var(--color-outline-variant);
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--color-on-surface-variant);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background: var(--color-surface-container-low);
     }
   }
 
   table {
     width: 100%;
     border-collapse: collapse;
+    background: var(--color-surface-container-lowest);
+    border: 1px solid var(--color-outline-variant);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
 
-    th,
+    thead {
+      background: var(--color-surface-container-low);
+    }
+
+    th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--color-secondary);
+      border-bottom: 1px solid var(--color-outline-variant);
+    }
+
     td {
       text-align: left;
-      padding: 0.5rem;
-      border-bottom: 1px solid #eee;
-      font-size: 0.9rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      border-bottom: 1px solid var(--color-outline-variant);
+    }
+
+    tbody tr:hover {
+      background: var(--color-surface-container-low);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
     }
 
     .row-actions {
       display: flex;
-      gap: 0.5rem;
+      gap: var(--space-sm);
+
+      button {
+        padding: 0.35rem 0.75rem;
+        border: 1px solid var(--color-outline-variant);
+        border-radius: var(--radius-sm);
+        background: transparent;
+        color: var(--color-on-surface-variant);
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+
+        &:hover {
+          background: var(--color-surface-container-low);
+          color: var(--color-accent);
+        }
+      }
     }
   }
 
   .pagination {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    margin-top: 1rem;
+    gap: var(--space-md);
+    margin-top: var(--space-md);
+    font-size: 0.85rem;
+    color: var(--color-on-surface-variant);
+
+    button {
+      padding: 0.4rem 0.9rem;
+      border: 1px solid var(--color-outline-variant);
+      border-radius: var(--radius-md);
+      background: var(--color-surface-container-lowest);
+      cursor: pointer;
+
+      &:hover:not(:disabled) {
+        background: var(--color-surface-container-low);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
   }
 }

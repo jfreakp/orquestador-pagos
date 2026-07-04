@@ -64,7 +64,12 @@
             <td>{{ item.gatewayCode }}</td>
             <td>{{ item.channelCode }}</td>
             <td>{{ item.clientSystemCode }}</td>
-            <td>{{ item.statusCode }}</td>
+            <td>
+              <span
+                [class]="'status-pill status-pill--' + statusPillModifier(item.statusCode)"
+                >{{ item.statusCode }}</span
+              >
+            </td>
             <td>{{ item.amount }} {{ item.currency }}</td>
             <td>{{ item.externalReference || '—' }}</td>
             <td>{{ item.createdAt | date: 'short' }}</td>

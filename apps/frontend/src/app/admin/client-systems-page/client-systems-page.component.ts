@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminApiService } from '../core/admin-api.service';
 import { extractErrorMessage } from '../core/extract-error-message';
 import { pemPublicKeyValidator } from './pem-public-key.validator';
+import { booleanPillModifier } from '../../shared/status-pill';
 
 interface ClientSystemItem {
   id: number;
@@ -24,6 +25,8 @@ const PAGE_SIZE = 10;
   styleUrl: './client-systems-page.component.scss',
 })
 export class ClientSystemsPageComponent {
+  protected readonly booleanPillModifier = booleanPillModifier;
+
   private readonly api = inject(AdminApiService);
   private readonly fb = inject(FormBuilder);
 

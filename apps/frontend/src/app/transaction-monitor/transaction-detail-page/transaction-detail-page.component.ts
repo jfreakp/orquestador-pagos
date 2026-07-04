@@ -6,6 +6,7 @@ import { AdminApiService } from '../../admin/core/admin-api.service';
 import { extractErrorMessage } from '../../admin/core/extract-error-message';
 import { formatJsonHtml } from '../core/format-json-html';
 import { TransactionDetail } from '../core/monitor-models';
+import { statusPillModifier } from '../../shared/status-pill';
 
 const RESOURCE_PATH = 'transactions';
 
@@ -17,6 +18,8 @@ const RESOURCE_PATH = 'transactions';
   styleUrl: './transaction-detail-page.component.scss',
 })
 export class TransactionDetailPageComponent {
+  protected readonly statusPillModifier = statusPillModifier;
+
   private readonly route = inject(ActivatedRoute);
   private readonly api = inject(AdminApiService);
   private readonly sanitizer = inject(DomSanitizer);

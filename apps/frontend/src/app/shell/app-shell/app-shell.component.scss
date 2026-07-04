@@ -1,0 +1,121 @@
+.shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.shell-nav {
+  width: 260px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--color-surface-container-lowest);
+  border-right: 1px solid var(--color-outline-variant);
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-sm) var(--space-sm) 0;
+}
+
+.brand-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.brand-tag {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.nav-group-label {
+  margin: var(--space-md) 0 var(--space-xs) var(--space-sm);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+nav a {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.6rem var(--space-sm);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--color-on-surface-variant);
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+
+  .material-symbols-outlined {
+    font-size: 20px;
+  }
+
+  &:hover {
+    background: var(--color-surface-container-low);
+  }
+
+  &.active {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+}
+
+.admin-token {
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-outline-variant);
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-secondary);
+  }
+
+  input {
+    padding: 0.5rem 0.6rem;
+    border: 1px solid var(--color-outline-variant);
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-charcoal);
+      box-shadow: 0 0 0 3px rgba(255, 56, 92, 0.12);
+    }
+  }
+}
+
+.shell-content {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-lg);
+  overflow-x: auto;
+}

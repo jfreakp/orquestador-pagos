@@ -1,20 +1,20 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { AdminTokenService } from '../core/admin-token.service';
+import { AdminTokenService } from '../../admin/core/admin-token.service';
 
 @Component({
-  selector: 'app-admin-shell',
+  selector: 'app-shell',
   standalone: true,
   imports: [RouterLink, RouterLinkActive, RouterOutlet, FormsModule],
-  templateUrl: './admin-shell.component.html',
-  styleUrl: './admin-shell.component.scss',
+  templateUrl: './app-shell.component.html',
+  styleUrl: './app-shell.component.scss',
 })
-export class AdminShellComponent {
+export class AppShellComponent {
   protected readonly tokenService = inject(AdminTokenService);
   protected tokenInput = this.tokenService.token();
 
-  saveToken(): void {
+  protected saveToken(): void {
     this.tokenService.setToken(this.tokenInput.trim());
   }
 }

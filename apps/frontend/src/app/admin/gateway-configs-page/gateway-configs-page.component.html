@@ -123,8 +123,18 @@
           <tr>
             <td>{{ gatewayCodeById().get(item.gatewayId) }}</td>
             <td>{{ channelCodeById().get(item.channelId) }}</td>
-            <td>{{ item.isActive ? 'Sí' : 'No' }}</td>
-            <td>{{ item.hasCredentials ? 'Configuradas' : 'Sin configurar' }}</td>
+            <td>
+              <span
+                [class]="'status-pill status-pill--' + booleanPillModifier(item.isActive)"
+                >{{ item.isActive ? 'Activo' : 'Inactivo' }}</span
+              >
+            </td>
+            <td>
+              <span
+                [class]="'status-pill status-pill--' + booleanPillModifier(item.hasCredentials)"
+                >{{ item.hasCredentials ? 'Configuradas' : 'Sin configurar' }}</span
+              >
+            </td>
             <td class="row-actions">
               <button type="button" (click)="startEdit(item)">Editar</button>
               <button type="button" (click)="remove(item)">Eliminar</button>

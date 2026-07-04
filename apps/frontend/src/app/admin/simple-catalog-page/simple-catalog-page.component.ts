@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AdminApiService } from '../core/admin-api.service';
 import { extractErrorMessage } from '../core/extract-error-message';
+import { booleanPillModifier } from '../../shared/status-pill';
 
 interface CatalogItem {
   id: number;
@@ -22,6 +23,8 @@ const PAGE_SIZE = 10;
   styleUrl: './simple-catalog-page.component.scss',
 })
 export class SimpleCatalogPageComponent {
+  protected readonly booleanPillModifier = booleanPillModifier;
+
   private readonly route = inject(ActivatedRoute);
   private readonly api = inject(AdminApiService);
   private readonly fb = inject(FormBuilder);

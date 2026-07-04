@@ -15,6 +15,10 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+    ports:
+      # Expuesto al host para poder correr el backend/Prisma en local
+      # (npx nx serve backend, prisma migrate dev) contra esta misma DB.
+      - '5432:5432'
 
   backend:
     build:

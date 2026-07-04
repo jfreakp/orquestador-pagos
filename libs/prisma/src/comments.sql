@@ -45,6 +45,15 @@ COMMENT ON COLUMN error_categories.code IS 'Código corto de la categoría (p.ej
 COMMENT ON COLUMN error_categories.name IS 'Nombre legible para mostrar en el panel de administración.';
 
 -- ---------------------------------------------------------------------------
+-- admins
+-- ---------------------------------------------------------------------------
+
+COMMENT ON TABLE admins IS 'Usuario humano que administra el orquestador desde el panel /admin. Se autentica con usuario/contraseña vía POST /admin-auth/login, que devuelve un JWT propio (HS256, corta duración) distinto del JWT RS256 de los sistemas clientes.';
+COMMENT ON COLUMN admins.username IS 'Nombre de usuario para iniciar sesión.';
+COMMENT ON COLUMN admins.password_hash IS 'Hash bcrypt de la contraseña; nunca se guarda en texto plano.';
+COMMENT ON COLUMN admins.is_active IS 'Si es false, el login es rechazado aunque la contraseña sea correcta.';
+
+-- ---------------------------------------------------------------------------
 -- client_systems
 -- ---------------------------------------------------------------------------
 

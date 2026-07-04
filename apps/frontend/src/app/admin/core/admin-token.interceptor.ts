@@ -1,14 +1,31 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { AdminTokenService } from './admin-token.service';
+import { Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
+import { AdminAuthService } from './admin-auth.service';
 
 export const adminTokenInterceptor: HttpInterceptorFn = (req, next) => {
-  const tokenService = inject(AdminTokenService);
-  const token = tokenService.token();
+  const authService = inject(AdminAuthService);
+  const router = inject(Router);
+  const token = authService.accessToken();
 
-  if (!token || !req.url.startsWith('/api/')) {
-    return next(req);
-  }
+  const isLoginRequest = req.url === '/api/admin-auth/login';
+  const authorizedReq =
+    token && req.url.startsWith('/api/') && !isLoginRequest
+      ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
+      : req;
 
-  return next(req.clone({ setHeaders: { 'x-admin-token': token } }));
+  return next(authorizedReq).pipe(
+    catchError((error: unknown) => {
+      if (
+        error instanceof HttpErrorResponse &&
+        error.status === 401 &&
+        !isLoginRequest
+      ) {
+        authService.logout();
+        router.navigateByUrl('/login');
+      }
+      return throwError(() => error);
+    }),
+  );
 };

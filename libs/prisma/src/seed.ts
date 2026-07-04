@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import bcrypt from 'bcryptjs';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../generated/client';
 
@@ -80,6 +81,22 @@ async function main() {
       where: { code: category.code },
       update: {},
       create: category,
+    });
+  }
+
+  const seedAdminUsername = process.env.ADMIN_SEED_USERNAME || 'admin';
+  const seedAdminPassword = process.env.ADMIN_SEED_PASSWORD;
+  if (!seedAdminPassword) {
+    console.warn(
+      'ADMIN_SEED_PASSWORD not set — skipping initial Admin seed. ' +
+        'Set it in .env and re-run `npx prisma db seed` to create the first admin user.',
+    );
+  } else {
+    const passwordHash = await bcrypt.hash(seedAdminPassword, 10);
+    await prisma.admin.upsert({
+      where: { username: seedAdminUsername },
+      update: {},
+      create: { username: seedAdminUsername, passwordHash },
     });
   }
 }

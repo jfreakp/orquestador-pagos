@@ -1,6 +1,9 @@
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import * as jwt from 'jsonwebtoken';
 import { AdminAuthGuard } from './admin-auth.guard';
+
+const SECRET = 'test-secret';
 
 function buildContext(headers: Record<string, string>): ExecutionContext {
   return {
@@ -8,38 +11,58 @@ function buildContext(headers: Record<string, string>): ExecutionContext {
   } as unknown as ExecutionContext;
 }
 
-describe('AdminAuthGuard', () => {
-  function buildGuard(configuredToken: string | undefined) {
-    const configService = {
-      get: jest.fn().mockReturnValue(configuredToken),
-    } as unknown as ConfigService;
-    return new AdminAuthGuard(configService);
-  }
+function buildGuard(configuredSecret: string | undefined) {
+  const configService = {
+    get: jest.fn().mockReturnValue(configuredSecret),
+  } as unknown as ConfigService;
+  return new AdminAuthGuard(configService);
+}
 
-  it('allows the request when the header matches ADMIN_API_TOKEN', () => {
-    const guard = buildGuard('super-secret');
-    const context = buildContext({ 'x-admin-token': 'super-secret' });
+describe('AdminAuthGuard', () => {
+  it('allows the request when the bearer token is a validly signed JWT', () => {
+    const guard = buildGuard(SECRET);
+    const token = jwt.sign({ sub: 1, username: 'admin' }, SECRET, {
+      algorithm: 'HS256',
+    });
+    const context = buildContext({ authorization: `Bearer ${token}` });
 
     expect(guard.canActivate(context)).toBe(true);
   });
 
-  it('rejects when the header is missing', () => {
-    const guard = buildGuard('super-secret');
+  it('rejects when the Authorization header is missing', () => {
+    const guard = buildGuard(SECRET);
     const context = buildContext({});
 
     expect(() => guard.canActivate(context)).toThrow(UnauthorizedException);
   });
 
-  it('rejects when the header does not match', () => {
-    const guard = buildGuard('super-secret');
-    const context = buildContext({ 'x-admin-token': 'wrong' });
+  it('rejects when the token is signed with a different secret', () => {
+    const guard = buildGuard(SECRET);
+    const token = jwt.sign({ sub: 1, username: 'admin' }, 'wrong-secret', {
+      algorithm: 'HS256',
+    });
+    const context = buildContext({ authorization: `Bearer ${token}` });
 
     expect(() => guard.canActivate(context)).toThrow(UnauthorizedException);
   });
 
-  it('rejects everything when ADMIN_API_TOKEN is not configured', () => {
+  it('rejects an expired token', () => {
+    const guard = buildGuard(SECRET);
+    const token = jwt.sign({ sub: 1, username: 'admin' }, SECRET, {
+      algorithm: 'HS256',
+      expiresIn: -1,
+    });
+    const context = buildContext({ authorization: `Bearer ${token}` });
+
+    expect(() => guard.canActivate(context)).toThrow(UnauthorizedException);
+  });
+
+  it('rejects everything when ADMIN_JWT_SECRET is not configured', () => {
     const guard = buildGuard(undefined);
-    const context = buildContext({ 'x-admin-token': 'anything' });
+    const token = jwt.sign({ sub: 1, username: 'admin' }, SECRET, {
+      algorithm: 'HS256',
+    });
+    const context = buildContext({ authorization: `Bearer ${token}` });
 
     expect(() => guard.canActivate(context)).toThrow(UnauthorizedException);
   });

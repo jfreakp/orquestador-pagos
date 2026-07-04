@@ -53,16 +53,15 @@
       </a>
     </nav>
 
-    <div class="admin-token">
-      <label>
-        Token admin
-        <input
-          type="password"
-          [(ngModel)]="tokenInput"
-          (change)="saveToken()"
-          placeholder="x-admin-token"
-        />
-      </label>
+    <div class="session">
+      <div class="session-user">
+        <span class="material-symbols-outlined">account_circle</span>
+        <span>{{ authService.username() }}</span>
+      </div>
+      <button type="button" class="logout" (click)="logout()">
+        <span class="material-symbols-outlined">logout</span>
+        Cerrar sesión
+      </button>
     </div>
   </aside>
 

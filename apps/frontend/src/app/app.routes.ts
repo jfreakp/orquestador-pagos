@@ -1,10 +1,19 @@
 import { Route } from '@angular/router';
+import { adminAuthGuard } from './admin/core/admin-auth.guard';
 import { AppShellComponent } from './shell/app-shell/app-shell.component';
 
 export const appRoutes: Route[] = [
   {
+    path: 'login',
+    loadComponent: () =>
+      import('./login-page/login-page.component').then(
+        (m) => m.LoginPageComponent,
+      ),
+  },
+  {
     path: '',
     component: AppShellComponent,
+    canActivate: [adminAuthGuard],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'admin' },
       {

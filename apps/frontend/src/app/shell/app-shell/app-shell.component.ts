@@ -1,20 +1,20 @@
 import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { AdminTokenService } from '../../admin/core/admin-token.service';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AdminAuthService } from '../../admin/core/admin-auth.service';
 
 @Component({
   selector: 'app-shell',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, RouterOutlet, FormsModule],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './app-shell.component.html',
   styleUrl: './app-shell.component.scss',
 })
 export class AppShellComponent {
-  protected readonly tokenService = inject(AdminTokenService);
-  protected tokenInput = this.tokenService.token();
+  protected readonly authService = inject(AdminAuthService);
+  private readonly router = inject(Router);
 
-  protected saveToken(): void {
-    this.tokenService.setToken(this.tokenInput.trim());
+  protected logout(): void {
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
   }
 }

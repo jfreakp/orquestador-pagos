@@ -30,7 +30,7 @@ services:
       # container, where postgres is reachable at hostname `postgres`.
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
       APP_ENCRYPTION_MASTER_KEY: ${APP_ENCRYPTION_MASTER_KEY}
-      ADMIN_API_TOKEN: ${ADMIN_API_TOKEN}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
       PORT: ${PORT:-3000}
     depends_on:
       postgres:

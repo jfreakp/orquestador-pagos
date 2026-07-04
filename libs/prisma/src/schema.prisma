@@ -106,6 +106,29 @@ model ErrorCategory {
 }
 
 // ---------------------------------------------------------------------------
+// Administradores
+// ---------------------------------------------------------------------------
+
+/// Usuario humano que administra el orquestador desde el panel /admin
+/// (catálogos, configuración de gateways, monitor de transacciones).
+/// Se autentica con usuario/contraseña vía POST /admin-auth/login, que
+/// devuelve un JWT propio (HS256, corta duración) distinto del JWT RS256
+/// de los sistemas clientes.
+model Admin {
+  id       Int    @id @default(autoincrement())
+  /// Nombre de usuario para iniciar sesión.
+  username String @unique
+  /// Hash bcrypt de la contraseña; nunca se guarda en texto plano.
+  passwordHash String @map("password_hash")
+  /// Si es false, el login es rechazado aunque la contraseña sea correcta.
+  isActive Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("admins")
+}
+
+// ---------------------------------------------------------------------------
 // Sistemas clientes y configuración de gateways
 // ---------------------------------------------------------------------------
 

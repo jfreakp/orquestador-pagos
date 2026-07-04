@@ -1,0 +1,61 @@
+<main class="login-page">
+  <div class="login-card">
+    <header class="brand">
+      <h1>Orquestador</h1>
+      <p>Panel de administración</p>
+    </header>
+
+    <h2>Acceso al sistema</h2>
+    <p class="subtitle">Ingresa tus credenciales de administrador.</p>
+
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label>
+        Usuario
+        <div class="input-wrapper">
+          <span class="material-symbols-outlined">person</span>
+          <input
+            type="text"
+            formControlName="username"
+            placeholder="admin"
+            autocomplete="username"
+          />
+        </div>
+      </label>
+
+      <label>
+        Contraseña
+        <div class="input-wrapper">
+          <span class="material-symbols-outlined">key</span>
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+          />
+          <button
+            type="button"
+            class="toggle-visibility"
+            (click)="togglePassword()"
+          >
+            <span class="material-symbols-outlined">{{
+              showPassword ? 'visibility_off' : 'visibility'
+            }}</span>
+          </button>
+        </div>
+      </label>
+
+      <button type="submit" class="submit" [disabled]="submitting()">
+        @if (submitting()) {
+          Ingresando…
+        } @else {
+          Iniciar sesión
+          <span class="material-symbols-outlined">arrow_forward</span>
+        }
+      </button>
+    </form>
+  </div>
+</main>

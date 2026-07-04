@@ -2,7 +2,9 @@
   "name": "@orquestador/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "db:comments": "bash -c 'set -a; source .env; set +a; psql \"${DATABASE_URL%%\\?*}\" -f libs/prisma/src/comments.sql'"
+  },
   "private": true,
   "devDependencies": {
     "@angular-devkit/core": "~21.2.0",

@@ -1,0 +1,14 @@
+node_modules
+dist
+tmp
+.nx
+.angular
+.git
+.vscode
+.idea
+coverage
+*.log
+.env
+.env.*
+!.env.example
+libs/prisma/generated
